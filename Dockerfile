@@ -11,6 +11,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
 COPY . .
 RUN npx prisma generate
+ARG DATABASE_URL=file:./dev.db
+ENV DATABASE_URL=$DATABASE_URL
 RUN npm run build
 
 FROM node:20-alpine AS runner
