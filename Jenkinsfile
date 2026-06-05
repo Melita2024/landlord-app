@@ -33,12 +33,17 @@ pipeline {
     }
     stage('Deploy to k3s') {
       steps {
-        sh """
-          kubectl set image deployment/nextjs-app \
-            nextjs=${IMAGE}:${TAG} \
-            -n your-app
-          kubectl rollout status deployment/nextjs-app -n your-app
-        """
+        withCredentials([file(
+          credentialsId: 'k3s-kubeconfig',
+          variable: 'KUBECONFIG'
+        )]) {
+          sh """
+            kubectl set image deployment/nextjs-app \\
+              nextjs=${IMAGE}:${TAG} \\
+              -n your-app
+            kubectl rollout status deployment/nextjs-app -n your-app
+          """
+        }
       }
     }
   }
