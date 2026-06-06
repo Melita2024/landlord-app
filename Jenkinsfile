@@ -32,8 +32,7 @@ pipeline {
       }
     }
     stage('Deploy to k3s') {
-      steps {
-        withCredentials([file(
+      steps {        withCredentials([file(
           credentialsId: 'k3s-kubeconfig',
           variable: 'KUBECONFIG'
         )]) {
